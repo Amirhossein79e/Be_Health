@@ -16,6 +16,6 @@ public interface Dao {
     void insertStep(StepModel stepModel);
 
     @Query("select * from step limit 30 offset :myOffset")
-    MutableLiveData<List<StepModel>> selectStep(int myOffset);
+    LiveData<List<StepModel>> selectStep(int myOffset);
 
 }
