@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.amirhosseinemadi.behealth.R;
@@ -35,10 +36,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION},1);
             }
-
         }
-
-
 
 
     }
@@ -67,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -74,9 +73,11 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode)
         {
             case 1:
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this,StepService.class);
-                startService(intent);
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Intent intent = new Intent(this,StepService.class);
+                    startService(intent);
+                }
                 break;
         }
     }

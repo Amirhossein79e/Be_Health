@@ -9,6 +9,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
@@ -24,17 +25,21 @@ public class StepService extends Service implements SensorEventListener{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Thread thread = new Thread(new Runnable() {
+
+        class asyncStep extends AsyncTask<Void,Void,Void>
+        {
             @Override
-            public void run() {
+            protected Void doInBackground(Void... voids) {
                 Looper.prepare();
                 Toast.makeText(StepService.this, "Hello", Toast.LENGTH_SHORT).show();
                 sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                 sensorManager.registerListener(StepService.this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+                return null;
             }
-        });
-        thread.start();
+        }
+
+        new asyncStep().execute();
 
         return START_STICKY;
     }
@@ -50,17 +55,23 @@ public class StepService extends Service implements SensorEventListener{
     public void onDestroy() {
         super.onDestroy();
 
-        Intent intent = new Intent(this,this.getClass());
+        /*Intent intent = new Intent(this,this.getClass());
         intent.setPackage(getPackageName());
         PendingIntent pendingIntent = PendingIntent.getService(this,2,intent,PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME,SystemClock.elapsedRealtime()+1000,pendingIntent);
+        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME,SystemClock.elapsedRealtime()+1000,pendingIntent);*/
 
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+
+        Intent intent = new Intent(this,this.getClass());
+        intent.setPackage(getPackageName());
+        PendingIntent pendingIntent = PendingIntent.getService(this,2,intent,PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME,SystemClock.elapsedRealtime()+1000,pendingIntent);
     }
 
     @Override
