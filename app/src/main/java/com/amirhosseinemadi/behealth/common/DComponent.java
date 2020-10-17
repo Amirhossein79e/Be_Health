@@ -8,5 +8,6 @@ import dagger.Component;
 public interface DComponent {
 
     Context context();
+    PrefManager prefManager();
 
 }

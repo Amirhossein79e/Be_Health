@@ -2,7 +2,7 @@ package com.amirhosseinemadi.behealth.common;
 
 public class Application extends android.app.Application {
 
-    public DComponent dComponent;
+    public static DComponent dComponent;
 
     @Override
     public void onCreate() {

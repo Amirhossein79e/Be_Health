@@ -17,4 +17,28 @@ public class PrefManager {
         editor.apply();
     }
 
+
+    public void setStep(float step)
+    {
+        editor.putFloat("step",step).commit();
+    }
+
+
+    public float getStep()
+    {
+        return sharedPreferences.getFloat("step",0f);
+    }
+
+
+    public void setFirst(boolean status)
+    {
+        editor.putBoolean("first",status).commit();
+    }
+
+
+    public boolean getFirst()
+    {
+        return sharedPreferences.getBoolean("first",true);
+    }
+
 }

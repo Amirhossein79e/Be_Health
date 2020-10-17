@@ -21,4 +21,10 @@ public class DaggerModule {
         return context;
     }
 
+    @Provides
+    public PrefManager prefManager()
+    {
+        return new PrefManager(context);
+    }
+
 }
