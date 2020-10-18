@@ -1,4 +1,4 @@
-package com.amirhosseinemadi.behealth.model.room;
+package com.amirhosseinemadi.behealth.model.dataBase;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

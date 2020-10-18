@@ -34,7 +34,7 @@ public class StepService extends Service implements SensorEventListener{
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         PendingIntent pendingIntent = PendingIntent.getService(this,1,new Intent(this, MainActivity.class),PendingIntent.FLAG_ONE_SHOT);
-        if (Build.VERSION.SDK_INT>= 26)
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O)
         {
             NotificationChannel channel = new NotificationChannel("2329","Walking Channel",NotificationManager.IMPORTANCE_NONE);
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
@@ -78,8 +78,6 @@ public class StepService extends Service implements SensorEventListener{
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        System.out.println(event.values[0]);
-        Toast.makeText(this, "service", Toast.LENGTH_SHORT).show();
 
     }
 

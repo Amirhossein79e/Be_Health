@@ -1,7 +1,6 @@
-package com.amirhosseinemadi.behealth.model.room;
+package com.amirhosseinemadi.behealth.model.dataBase;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Insert;
 import androidx.room.Query;
 

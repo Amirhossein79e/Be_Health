@@ -3,12 +3,9 @@ package com.amirhosseinemadi.behealth.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.media.app.NotificationCompat;
-
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,7 +14,6 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 import com.amirhosseinemadi.behealth.R;
 import com.amirhosseinemadi.behealth.common.Application;
 import com.amirhosseinemadi.behealth.common.PrefManager;
@@ -31,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     /*
     - Step count in stepFragment
-    - walking time calculator.
+    - walking time calculator
+    - Stride
+    - User Information
      */
 
     private PrefManager prefManager;
