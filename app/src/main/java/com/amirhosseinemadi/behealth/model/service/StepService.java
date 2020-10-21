@@ -13,21 +13,30 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.Looper;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.amirhosseinemadi.behealth.R;
 import com.amirhosseinemadi.behealth.common.Application;
+import com.amirhosseinemadi.behealth.common.PrefManager;
 import com.amirhosseinemadi.behealth.view.MainActivity;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class StepService extends Service implements SensorEventListener{
+public class StepService extends Service {
 
     private SensorManager sensorManager;
-    private Sensor sensor;
+    private SensorEventListener stepDetectorListener;
+    private Sensor stepCounter;
+    private Sensor stepDetector;
     private Notification.Builder notification;
+    private int step;
+    private int time;
+    private Timer timer;
+    private Timer stepChecker;
+    private float realStep;
+    private float previousStep = 0f;
+    private PrefManager prefManager;
     public static Integer isRunning = null;
 
     @Override
@@ -43,20 +52,95 @@ public class StepService extends Service implements SensorEventListener{
         }else
         {
             notification = new Notification.Builder(this);
-            notification.setPriority(Notification.PRIORITY_MIN);
         }
+        notification.setPriority(Notification.PRIORITY_MIN);
         notification.setContent(new RemoteViews(getPackageName(),R.layout.notification_layout));
         notification.setSmallIcon(R.drawable.ic_notification);
         startForeground(2329,notification.build());
+
         isRunning = 0;
+
+        prefManager = Application.dComponent.prefManager();
 
         class asyncStep extends AsyncTask<Void,Void,Void>
         {
             @Override
             protected Void doInBackground(Void... voids) {
+
                 sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-                sensorManager.registerListener(StepService.this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+                stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+                stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+
+
+                SensorEventListener stepCounterListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+
+                        realStep++;
+                        System.out.println(event.values[0]+"steps");
+
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+
+                sensorManager.registerListener(stepCounterListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+
+                stepDetectorListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+
+                        step++;
+                        if (step>=20)
+                        {
+                            step=0;
+                            sensorManager.unregisterListener(stepDetectorListener);
+
+                            timer = new Timer();
+                            timer.scheduleAtFixedRate(new TimerTask() {
+                                @Override
+                                public void run()
+                                {
+                                    time++;
+                                    System.out.println(time);
+                                }
+                            },1000,1000);
+
+                            stepChecker = new Timer();
+                            stepChecker.scheduleAtFixedRate(new TimerTask() {
+                                @Override
+                                public void run()
+                                {
+                                    if (previousStep==realStep)
+                                    {
+                                        timer.cancel();
+                                        int previousTime = prefManager.getTime();
+                                        prefManager.setTime(previousTime+time);
+                                        time = 0;
+                                        sensorManager.registerListener(stepDetectorListener,stepDetector,SensorManager.SENSOR_DELAY_NORMAL);
+                                        stepChecker.cancel();
+                                    }
+                                    previousStep = realStep;
+                                }
+                            },5000,10000);
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+
+
+                 sensorManager.registerListener(stepDetectorListener,stepDetector,SensorManager.SENSOR_DELAY_NORMAL);
+
+
                 return null;
             }
         }
@@ -72,19 +156,6 @@ public class StepService extends Service implements SensorEventListener{
     public IBinder onBind(Intent intent) {
 
         return null;
-    }
-
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-
-    }
-
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
 }

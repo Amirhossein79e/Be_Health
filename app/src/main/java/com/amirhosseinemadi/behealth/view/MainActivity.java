@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,13 +14,18 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.amirhosseinemadi.behealth.R;
 import com.amirhosseinemadi.behealth.common.Application;
 import com.amirhosseinemadi.behealth.common.PrefManager;
 import com.amirhosseinemadi.behealth.databinding.ActivityMainBinding;
+import com.amirhosseinemadi.behealth.databinding.DetailDialogBinding;
 import com.amirhosseinemadi.behealth.model.service.StepBroadcast;
 import com.amirhosseinemadi.behealth.model.service.StepService;
+import com.amirhosseinemadi.behealth.viewModel.DialogVm;
 import com.amirhosseinemadi.behealth.viewModel.MainVm;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private Intent stepBroadcastIntent;
     private PendingIntent stepPending;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +60,22 @@ public class MainActivity extends AppCompatActivity {
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor STEP_COUNTER = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+        if (prefManager.getHeight()==0)
+        {
+            dialog = new Dialog(MainActivity.this);
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.layout_radius));
+            DetailDialogBinding dialogBinding = DataBindingUtil.inflate(LayoutInflater.from(MainActivity.this),R.layout.detail_dialog,null,false);
+            DialogVm dialogVm = new DialogVm(dialog);
+            dialogBinding.setViewModel(dialogVm);
+            dialog.setContentView(dialogBinding.getRoot());
+            dialog.show();
+        }
+
 
         if (STEP_COUNTER != null)
         {
+            Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             {
                 if (!(checkSelfPermission(Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED))
@@ -153,4 +173,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

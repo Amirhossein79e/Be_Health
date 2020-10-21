@@ -18,6 +18,54 @@ public class PrefManager {
     }
 
 
+    public void setFirst(boolean status)
+    {
+        editor.putBoolean("first",status).commit();
+    }
+
+
+    public boolean getFirst()
+    {
+        return sharedPreferences.getBoolean("first",true);
+    }
+
+
+    public void setHeight(int height)
+    {
+        editor.putInt("height",height).commit();
+    }
+
+
+    public int getHeight()
+    {
+        return sharedPreferences.getInt("height",0);
+    }
+
+
+    public void setWeight(int weight)
+    {
+        editor.putInt("weight",weight).commit();
+    }
+
+
+    public int getWeight()
+    {
+        return sharedPreferences.getInt("weight",0);
+    }
+
+
+    public void setGender(String gender)
+    {
+        editor.putString("gender",gender).commit();
+    }
+
+
+    public String getGender()
+    {
+        return sharedPreferences.getString("gender","");
+    }
+
+
     public void setStep(float step)
     {
         editor.putFloat("step",step).commit();
@@ -30,15 +78,17 @@ public class PrefManager {
     }
 
 
-    public void setFirst(boolean status)
+    public void setTime(int time)
     {
-        editor.putBoolean("first",status).commit();
+        editor.putInt("time",time).commit();
     }
 
 
-    public boolean getFirst()
+    public int getTime()
     {
-        return sharedPreferences.getBoolean("first",true);
+        return sharedPreferences.getInt("time",0);
     }
+
+
 
 }

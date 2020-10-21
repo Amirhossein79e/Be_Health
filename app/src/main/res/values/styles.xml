@@ -14,6 +14,25 @@
         <item name="background">@color/md_white_1000</item>
         <item name="labelVisibilityMode">selected</item>
         <item name="itemTextColor">@color/md_grey_600</item>
+        <item name="android:textColor">@color/md_grey_700</item>
+    </style>
+
+
+    <style name="my_edit_text" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp56</item>
+        <item name="android:background">@drawable/edt_background</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/dp8</item>
+    </style>
+
+
+    <style name="my_button" parent="TextAppearance.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp56</item>
+        <item name="android:background">@drawable/btn_background</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/md_grey_600</item>
     </style>
 
 
