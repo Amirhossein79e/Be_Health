@@ -3,8 +3,8 @@
 
 
 
-    <item android:id="@+id/heart_menu_item" android:title="Heart rate" android:icon="@drawable/ic_heart_rate" android:checked="false"> </item>
-    <item android:id="@+id/step_menu_item" android:title="Steps" android:icon="@drawable/ic_steps" android:checked="false"> </item>
+    <item android:id="@+id/heart_menu_item" android:title="Heart rate" android:icon="@drawable/ic_heartbeat" android:checked="false"> </item>
+    <item android:id="@+id/step_menu_item" android:title="Steps" android:icon="@drawable/ic_step" android:checked="false"> </item>
     <item android:id="@+id/calories_menu_item" android:title="Calories" android:icon="@drawable/ic_calories" android:checked="false"> </item>
 
 </menu>

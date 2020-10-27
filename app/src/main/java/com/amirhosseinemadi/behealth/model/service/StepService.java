@@ -13,13 +13,19 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.Looper;
 import android.widget.RemoteViews;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.MutableLiveData;
 import com.amirhosseinemadi.behealth.R;
 import com.amirhosseinemadi.behealth.common.Application;
 import com.amirhosseinemadi.behealth.common.PrefManager;
 import com.amirhosseinemadi.behealth.view.MainActivity;
+import com.amirhosseinemadi.behealth.view.StepFragment;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,12 +38,16 @@ public class StepService extends Service {
     private Notification.Builder notification;
     private int step;
     private int time;
+    public static MutableLiveData<Integer> timeLiveData = new MutableLiveData<>();
+    public static MutableLiveData<Float> stepLiveData = new MutableLiveData<>();
+    private float realStepPreferences;
     private Timer timer;
     private Timer stepChecker;
     private float realStep;
     private float previousStep = 0f;
     private PrefManager prefManager;
     public static Integer isRunning = null;
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -71,13 +81,16 @@ public class StepService extends Service {
                 stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
                 stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
+                timeLiveData.postValue(prefManager.getTime());
+
 
                 SensorEventListener stepCounterListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
 
                         realStep++;
-                        System.out.println(event.values[0]+"steps");
+                        realStepPreferences = event.values[0];
+                        System.out.println(event.values[0]);
 
                     }
 
@@ -117,13 +130,22 @@ public class StepService extends Service {
                                     if (previousStep==realStep)
                                     {
                                         timer.cancel();
-                                        int previousTime = prefManager.getTime();
-                                        prefManager.setTime(previousTime+time);
-                                        time = 0;
                                         sensorManager.registerListener(stepDetectorListener,stepDetector,SensorManager.SENSOR_DELAY_NORMAL);
                                         stepChecker.cancel();
                                     }
                                     previousStep = realStep;
+
+                                    int previousTime = prefManager.getTime();
+                                    prefManager.setTime(previousTime+time);
+                                    time = 0;
+
+                                    prefManager.setStep(realStepPreferences-prefManager.getPreviousStep());
+                                    if (StepFragment.isRunning==1)
+                                    {
+                                        stepLiveData.postValue(prefManager.getStep());
+                                        timeLiveData.postValue(prefManager.getTime());
+                                    }
+
                                 }
                             },5000,10000);
 

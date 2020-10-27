@@ -1,11 +1,10 @@
 package com.amirhosseinemadi.behealth.viewModel;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.databinding.BaseObservable;
+
+import com.amirhosseinemadi.behealth.callback.DialogVmCallback;
 import com.amirhosseinemadi.behealth.common.Application;
 import com.amirhosseinemadi.behealth.common.PrefManager;
 
@@ -13,40 +12,56 @@ public class DialogVm extends BaseObservable {
 
     public String weight = "";
     public String height = "";
+    public String age = "";
     public boolean maleChecked = false;
     public boolean femaleChecked = false;
     private PrefManager prefManager;
     private Dialog dialog;
+    private DialogVmCallback dialogVmCallback;
 
-    public DialogVm(Dialog dialog)
+    public DialogVm(Dialog dialog, DialogVmCallback dialogVmCallback)
     {
         this.dialog = dialog;
-      prefManager = Application.dComponent.prefManager();
+        this.dialogVmCallback = dialogVmCallback;
+        prefManager = Application.dComponent.prefManager();
+
     }
 
 
     public void submitClick()
     {
-        if ((maleChecked || femaleChecked)&& !weight.isEmpty() && !height.isEmpty())
+        if ((maleChecked || femaleChecked)&& !weight.isEmpty() && !height.isEmpty()&& !age.isEmpty())
         {
+            if (Integer.parseInt(height)!=0 && Integer.parseInt(weight)!=0 && Integer.parseInt(age)!=0)
+            {
             if (maleChecked)
             {
                 prefManager.setGender("male");
+                prefManager.setStride(Application.dComponent.calculator().calculateStride("male",Integer.parseInt(height)));
+                prefManager.setBmr(Application.dComponent.calculator().calculateBmr("male",Integer.parseInt(weight),Integer.parseInt(height),Integer.parseInt(age)));
             }else
                 {
                     prefManager.setGender("female");
+                    prefManager.setStride(Application.dComponent.calculator().calculateStride("female",Integer.parseInt(height)));
+                    prefManager.setBmr(Application.dComponent.calculator().calculateBmr("female",Integer.parseInt(weight),Integer.parseInt(height),Integer.parseInt(age)));
                 }
 
-            if (Integer.parseInt(height)!=0 && Integer.parseInt(weight)!=0)
-            {
                 prefManager.setWeight(Integer.parseInt(weight));
                 prefManager.setHeight(Integer.parseInt(height));
+                prefManager.setAge(Integer.parseInt(age));
+                prefManager.setTarget(6000);
+
+                dialogVmCallback.onCorrect();
                 dialog.cancel();
+
+            }else
+            {
+                dialogVmCallback.onIncorrect();
             }
 
         }else
         {
-            //TODO SnackBar
+            dialogVmCallback.onIncorrect();
         }
     }
 

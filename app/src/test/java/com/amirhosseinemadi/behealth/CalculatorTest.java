@@ -24,6 +24,27 @@ public class CalculatorTest {
     @Test
     public void distanceTest()
     {
-        Assert.assertEquals(calculator.calculateDistance(7901f,76.775f),6065,1f);
+        Assert.assertEquals(calculator.calculateDistance(5751f,76.775f),4400f,100f);
+    }
+
+
+    @Test
+    public void bmrTest()
+    {
+        Assert.assertEquals(calculator.calculateBmr("female",71,185,20),1605,0);
+    }
+
+
+    @Test
+    public void metTest()
+    {
+        Assert.assertEquals(calculator.calculateMet(6000f,80),3f,0f);
+    }
+
+
+    @Test
+    public void caloriesTest()
+    {
+        Assert.assertEquals(calculator.calculateCalories(1771,3,4800),295f,1f);
     }
 }

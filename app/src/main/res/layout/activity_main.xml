@@ -14,7 +14,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity"
-    android:background="@color/md_grey_50"
+    android:background="@color/md_white_1000"
     android:id="@+id/layout_main">
 
 
@@ -75,7 +75,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/bottom_navigation_main"
                 app:menu="@menu/bottom_menu_main"
-                style="@style/my_bottom_nav_style">
+                style="@style/my_bottom_nav_style"
+                app:elevation="@dimen/dp8">
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 

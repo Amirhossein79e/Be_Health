@@ -17,8 +17,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.amirhosseinemadi.behealth.R;
+import com.amirhosseinemadi.behealth.callback.DialogVmCallback;
 import com.amirhosseinemadi.behealth.common.Application;
 import com.amirhosseinemadi.behealth.common.PrefManager;
 import com.amirhosseinemadi.behealth.databinding.ActivityMainBinding;
@@ -29,7 +29,7 @@ import com.amirhosseinemadi.behealth.viewModel.DialogVm;
 import com.amirhosseinemadi.behealth.viewModel.MainVm;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DialogVmCallback {
 
     /*
     - Step count in stepFragment
@@ -55,10 +55,23 @@ public class MainActivity extends AppCompatActivity {
         prefManager = Application.dComponent.prefManager();
 
         binding.bottomNavigationMain.setOnNavigationItemSelectedListener(this::onBottomNavMainItemSelected);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,new StepFragment()).commit();
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor STEP_COUNTER = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+
+        if (STEP_COUNTER != null)
+        {
+            if (StepService.isRunning == null && !prefManager.getFirst()) {
+                Intent intent = new Intent(this, StepService.class);
+                startService(intent);
+                alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                stepBroadcastIntent = new Intent(this, StepBroadcast.class);
+                stepPending = PendingIntent.getBroadcast(this, 0, stepBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 3600000, AlarmManager.INTERVAL_HOUR, stepPending);
+            }
+        }
+
 
         if (prefManager.getHeight()==0)
         {
@@ -66,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.layout_radius));
             DetailDialogBinding dialogBinding = DataBindingUtil.inflate(LayoutInflater.from(MainActivity.this),R.layout.detail_dialog,null,false);
-            DialogVm dialogVm = new DialogVm(dialog);
+            DialogVm dialogVm = new DialogVm(dialog,MainActivity.this);
             dialogBinding.setViewModel(dialogVm);
             dialog.setContentView(dialogBinding.getRoot());
             dialog.show();
@@ -100,25 +113,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (STEP_COUNTER != null)
-        {
-            if (StepService.isRunning == null && !prefManager.getFirst()) {
-                Intent intent = new Intent(this, StepService.class);
-                startService(intent);
-                alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                stepBroadcastIntent = new Intent(this, StepBroadcast.class);
-                stepPending = PendingIntent.getBroadcast(this, 0, stepBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 3600000, AlarmManager.INTERVAL_HOUR, stepPending);
-            }
-        }
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        prefManager.setFirst(false);
+
+        if (prefManager.getFirst())
+        {
+            prefManager.setFirst(false);
+        }else
+        {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,new StepFragment()).commit();
+        }
+
+
     }
 
     private boolean onBottomNavMainItemSelected(MenuItem item)
@@ -166,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.setTitle("Permission denied");
                     alertDialog.setMessage("Permission denied. Be Health application need Physical Activity permission for record your walking info." +
                             "if you want allow permission go to Settings->Apps->Be-Health->Permissions->Physical activity and allow the permission.");
-                    alertDialog.setIcon(R.drawable.ic_steps);
+                    alertDialog.setIcon(R.drawable.ic_step);
                     alertDialog.setPositiveButton("OK",null);
                     alertDialog.show();
                 }
@@ -174,4 +183,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onIncorrect() {
+
+        Toast.makeText(MainActivity.this, "Detail is incorrect", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onCorrect() {
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,new StepFragment()).commit();
+
+    }
 }

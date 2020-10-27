@@ -66,6 +66,42 @@ public class PrefManager {
     }
 
 
+    public void setAge(int age)
+    {
+        editor.putInt("age",age).commit();
+    }
+
+
+    public int getAge()
+    {
+        return sharedPreferences.getInt("age",0);
+    }
+
+
+    public void setStride(float stride)
+    {
+        editor.putFloat("stride",stride).commit();
+    }
+
+
+    public float getStride()
+    {
+        return sharedPreferences.getFloat("stride",0);
+    }
+
+
+    public void setTarget(int target)
+    {
+        editor.putInt("target",target).commit();
+    }
+
+
+    public int getTarget()
+    {
+        return sharedPreferences.getInt("target",0);
+    }
+
+
     public void setStep(float step)
     {
         editor.putFloat("step",step).commit();
@@ -78,6 +114,18 @@ public class PrefManager {
     }
 
 
+    public void setPreviousStep(float steps)
+    {
+        editor.putFloat("previousStep",steps).commit();
+    }
+
+
+    public float getPreviousStep()
+    {
+        return sharedPreferences.getFloat("previousFloat",0f);
+    }
+
+
     public void setTime(int time)
     {
         editor.putInt("time",time).commit();
@@ -87,6 +135,18 @@ public class PrefManager {
     public int getTime()
     {
         return sharedPreferences.getInt("time",0);
+    }
+
+
+    public void setBmr(int bmr)
+    {
+        editor.putInt("bmr",bmr).commit();
+    }
+
+
+    public int getBmr()
+    {
+        return sharedPreferences.getInt("bmr",0);
     }
 
 

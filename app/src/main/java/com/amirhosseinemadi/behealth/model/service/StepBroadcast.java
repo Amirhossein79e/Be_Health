@@ -31,9 +31,8 @@ public class StepBroadcast extends BroadcastReceiver implements SensorEventListe
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        float previous = prefManager.getStep();
-        prefManager.setStep(previous+event.values[0]);
-        sensorManager.flush(this);
+        prefManager.setPreviousStep(event.values[0]);
+        prefManager.setStep(0f);
 
     }
 

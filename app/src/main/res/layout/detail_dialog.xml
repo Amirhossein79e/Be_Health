@@ -12,7 +12,8 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/layout_radius">
+    android:background="@drawable/layout_radius"
+    android:id="@+id/detail_layout">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -50,12 +51,29 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8">
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp8">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/my_edit_text"
                 android:hint="Height (Kilograms)"
-                android:text="@={viewModel.height}">
+                android:text="@={viewModel.height}"
+                android:inputType="number">
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/my_edit_text"
+                android:hint="Age"
+                android:text="@={viewModel.age}"
+                android:inputType="number">
             </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"
-            android:buttonTint="@color/md_light_green_A700"
+            android:buttonTint="@color/md_deep_purple_A400"
             android:layout_marginEnd="@dimen/dp8"
             android:textColor="@color/md_grey_700"
             android:checked="@={viewModel.maleChecked}">
@@ -81,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Female"
-            android:buttonTint="@color/md_light_green_A700"
+            android:buttonTint="@color/md_deep_purple_A400"
             android:layout_marginStart="@dimen/dp8"
             android:textColor="@color/md_grey_700"
             android:checked="@={viewModel.femaleChecked}">
