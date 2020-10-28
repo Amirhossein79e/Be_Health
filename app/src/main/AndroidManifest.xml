@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"> </uses-permission>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"> </uses-permission>
     <uses-permission android:name="android.permission.SET_ALARM"> </uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"> </uses-permission>
 
 
     <application
@@ -15,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MainActivity">
+
+        <activity android:name=".view.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"> </action>
 
@@ -23,15 +25,16 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".model.service.StepService" android:stopWithTask="false">
+        <service android:name=".model.service.StepService">  </service>
+
+        <receiver android:name=".model.service.StepBroadcast"> </receiver>
+
+        <receiver android:name=".model.service.RebootListener">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"> </action>
             </intent-filter>
-        </service>
-
-        <receiver android:name=".model.service.StepBroadcast">
-
         </receiver>
+
     </application>
 
 </manifest>

@@ -52,10 +52,11 @@ public class StepService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
         PendingIntent pendingIntent = PendingIntent.getService(this,1,new Intent(this, MainActivity.class),PendingIntent.FLAG_ONE_SHOT);
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O)
         {
-            NotificationChannel channel = new NotificationChannel("2329","Walking Channel",NotificationManager.IMPORTANCE_NONE);
+            NotificationChannel channel = new NotificationChannel("2329","Walking Channel",NotificationManager.IMPORTANCE_LOW);
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
             managerCompat.createNotificationChannel(channel);
             notification = new Notification.Builder(this,"2329");
@@ -63,9 +64,10 @@ public class StepService extends Service {
         {
             notification = new Notification.Builder(this);
         }
-        notification.setPriority(Notification.PRIORITY_MIN);
+        notification.setPriority(Notification.PRIORITY_LOW);
         notification.setContent(new RemoteViews(getPackageName(),R.layout.notification_layout));
-        notification.setSmallIcon(R.drawable.ic_notification);
+        notification.setSmallIcon(R.drawable.ic_calories);
+        notification.setContentIntent(pendingIntent);
         startForeground(2329,notification.build());
 
         isRunning = 0;
@@ -83,14 +85,13 @@ public class StepService extends Service {
 
                 timeLiveData.postValue(prefManager.getTime());
 
-
                 SensorEventListener stepCounterListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
 
                         realStep++;
                         realStepPreferences = event.values[0];
-                        System.out.println(event.values[0]);
+                        //System.out.println(event.values[0]);
 
                     }
 
@@ -118,7 +119,7 @@ public class StepService extends Service {
                                 public void run()
                                 {
                                     time++;
-                                    System.out.println(time);
+                                    //System.out.println(time);
                                 }
                             },1000,1000);
 
@@ -130,16 +131,40 @@ public class StepService extends Service {
                                     if (previousStep==realStep)
                                     {
                                         timer.cancel();
-                                        sensorManager.registerListener(stepDetectorListener,stepDetector,SensorManager.SENSOR_DELAY_NORMAL);
+                                        sensorManager.registerListener(stepDetectorListener, stepDetector, SensorManager.SENSOR_DELAY_NORMAL);
                                         stepChecker.cancel();
                                     }
                                     previousStep = realStep;
+
+                                    if (isFirst)
+                                    {
+                                        if (intent.getAction()!=null)
+                                        {
+                                            if (intent.getAction().equals("REBOOT"))
+                                            {
+                                                Looper.prepare();
+                                                prefManager.setPreviousStep(0);
+                                                Toast.makeText(StepService.this, "Hello", Toast.LENGTH_SHORT).show();
+                                                prefManager.setStep(realStepPreferences + prefManager.getBackupStep());
+                                                prefManager.setBackupStep(0);
+                                            }
+                                        }else
+                                        {
+                                            prefManager.setStep(realStepPreferences-prefManager.getPreviousStep());
+                                            prefManager.setBackupStep(realStepPreferences-prefManager.getPreviousStep());
+                                        }
+                                        isFirst = false;
+                                    }else
+                                    {
+                                        prefManager.setStep(realStepPreferences-prefManager.getPreviousStep());
+                                        prefManager.setBackupStep(realStepPreferences-prefManager.getPreviousStep());
+                                    }
 
                                     int previousTime = prefManager.getTime();
                                     prefManager.setTime(previousTime+time);
                                     time = 0;
 
-                                    prefManager.setStep(realStepPreferences-prefManager.getPreviousStep());
+
                                     if (StepFragment.isRunning==1)
                                     {
                                         stepLiveData.postValue(prefManager.getStep());

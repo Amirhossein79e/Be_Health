@@ -18,9 +18,10 @@ public class PrefManager {
     }
 
 
-    public void setFirst(boolean status)
+    public PrefManager setFirst(boolean status)
     {
         editor.putBoolean("first",status).commit();
+        return this;
     }
 
 
@@ -30,9 +31,23 @@ public class PrefManager {
     }
 
 
-    public void setHeight(int height)
+    public PrefManager setReboot(boolean reboot)
+    {
+        editor.putBoolean("reboot",reboot).commit();
+        return this;
+    }
+
+
+    public boolean getReboot()
+    {
+        return sharedPreferences.getBoolean("reboot",false);
+    }
+
+
+    public PrefManager setHeight(int height)
     {
         editor.putInt("height",height).commit();
+        return this;
     }
 
 
@@ -42,9 +57,10 @@ public class PrefManager {
     }
 
 
-    public void setWeight(int weight)
+    public PrefManager setWeight(int weight)
     {
         editor.putInt("weight",weight).commit();
+        return this;
     }
 
 
@@ -54,9 +70,10 @@ public class PrefManager {
     }
 
 
-    public void setGender(String gender)
+    public PrefManager setGender(String gender)
     {
         editor.putString("gender",gender).commit();
+        return this;
     }
 
 
@@ -66,9 +83,10 @@ public class PrefManager {
     }
 
 
-    public void setAge(int age)
+    public PrefManager setAge(int age)
     {
         editor.putInt("age",age).commit();
+        return this;
     }
 
 
@@ -78,9 +96,10 @@ public class PrefManager {
     }
 
 
-    public void setStride(float stride)
+    public PrefManager setStride(float stride)
     {
         editor.putFloat("stride",stride).commit();
+        return this;
     }
 
 
@@ -90,9 +109,10 @@ public class PrefManager {
     }
 
 
-    public void setTarget(int target)
+    public PrefManager setTarget(int target)
     {
         editor.putInt("target",target).commit();
+        return this;
     }
 
 
@@ -102,9 +122,10 @@ public class PrefManager {
     }
 
 
-    public void setStep(float step)
+    public PrefManager setStep(float step)
     {
         editor.putFloat("step",step).commit();
+        return this;
     }
 
 
@@ -114,9 +135,10 @@ public class PrefManager {
     }
 
 
-    public void setPreviousStep(float steps)
+    public PrefManager setPreviousStep(float steps)
     {
         editor.putFloat("previousStep",steps).commit();
+        return this;
     }
 
 
@@ -126,9 +148,23 @@ public class PrefManager {
     }
 
 
-    public void setTime(int time)
+    public PrefManager setBackupStep(float steps)
+    {
+        editor.putFloat("backupStep",steps).commit();
+        return this;
+    }
+
+
+    public float getBackupStep()
+    {
+        return sharedPreferences.getFloat("backupStep",0);
+    }
+
+
+    public PrefManager setTime(int time)
     {
         editor.putInt("time",time).commit();
+        return this;
     }
 
 
@@ -138,9 +174,10 @@ public class PrefManager {
     }
 
 
-    public void setBmr(int bmr)
+    public PrefManager setBmr(int bmr)
     {
         editor.putInt("bmr",bmr).commit();
+        return this;
     }
 
 

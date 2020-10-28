@@ -11,17 +11,20 @@ public class StepModel {
     @PrimaryKey(autoGenerate = true)
     int id;
 
-    @ColumnInfo(name = "count",typeAffinity = 3)
-    int count;
+    @ColumnInfo(name = "step",typeAffinity = 3)
+    int step;
 
-    @ColumnInfo(name = "minute",typeAffinity = 3)
-    int minute;
+    @ColumnInfo(name = "time",typeAffinity = 3)
+    int time;
 
-    @ColumnInfo(name = "distance",typeAffinity = 3)
+    @ColumnInfo(name = "distance",typeAffinity = 4)
     int distance;
 
     @ColumnInfo(name = "date",typeAffinity = 3)
     long date;
+
+    @ColumnInfo(name = "calorie",typeAffinity = 3)
+    float calories;
 
     public int getId() {
         return id;
@@ -31,20 +34,20 @@ public class StepModel {
         this.id = id;
     }
 
-    public int getCount() {
-        return count;
+    public int getStep() {
+        return step;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setStep(int step) {
+        this.step = step;
     }
 
-    public int getMinute() {
-        return minute;
+    public int getTime() {
+        return time;
     }
 
-    public void setMinute(int minute) {
-        this.minute = minute;
+    public void setTime(int time) {
+        this.time = time;
     }
 
     public int getDistance() {
@@ -61,5 +64,13 @@ public class StepModel {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    public float getCalories() {
+        return calories;
+    }
+
+    public void setCalories(float calories) {
+        this.calories = calories;
     }
 }
