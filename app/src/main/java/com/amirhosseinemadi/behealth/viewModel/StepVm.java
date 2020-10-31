@@ -3,16 +3,18 @@ package com.amirhosseinemadi.behealth.viewModel;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 
 import com.amirhosseinemadi.behealth.BR;
 import com.amirhosseinemadi.behealth.common.Application;
 import com.amirhosseinemadi.behealth.common.PrefManager;
-import com.amirhosseinemadi.behealth.model.service.StepService;
+import com.amirhosseinemadi.behealth.model.others.Calculator;
+
+import java.text.DecimalFormat;
 
 public class StepVm extends BaseObservable {
 
     private PrefManager prefManager;
+    private Calculator calculator;
 
     @Bindable
     public String steps = "0";
@@ -32,9 +34,16 @@ public class StepVm extends BaseObservable {
     public StepVm(LifecycleOwner lifecycleOwner)
     {
         prefManager = Application.dComponent.prefManager();
+        calculator = Application.dComponent.calculator();
+
         target = String.valueOf("/"+prefManager.getTarget());
         time = String.valueOf(prefManager.getTime()/60);
         steps = String.valueOf(prefManager.getStep());
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        distance = String.valueOf(decimalFormat.format((calculator.calculateDistance(prefManager.getStep(),prefManager.getStride()))/1000));
+        int calorie = calculator.calculateCalories(prefManager.getBmr(),calculator.calculateMet(calculator.calculateDistance(prefManager.getStep(),prefManager.getStride()),prefManager.getTime()),prefManager.getTime());
+        calories = String.valueOf(calorie);
+
     }
 
 

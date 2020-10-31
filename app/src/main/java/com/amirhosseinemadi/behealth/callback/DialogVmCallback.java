@@ -4,5 +4,5 @@ public interface DialogVmCallback {
 
     void onIncorrect();
     void onCorrect();
-
+    void onCanceled();
 }

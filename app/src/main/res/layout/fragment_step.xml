@@ -13,13 +13,19 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.StepFragment"
-    android:background="@color/md_white_1000">
+    tools:context=".view.StepFragment">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@color/md_white_1000">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -46,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.02"
+            app:layout_constraintGuide_percent="0.05"
             android:id="@+id/guideline_top">
         </androidx.constraintlayout.widget.Guideline>
 
@@ -112,7 +118,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="Steps"
             android:textSize="32sp"
-            android:id="@+id/txt_steps_below">
+            android:id="@+id/txt_steps_below"
+            android:layout_marginTop="@dimen/dp8">
         </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -125,7 +132,7 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_mid_ver"
             app:cardCornerRadius="@dimen/dp8"
             android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp24"
             app:cardElevation="@dimen/dp0"
             android:id="@+id/card_step">
 
@@ -133,7 +140,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/card_background"
+                android:background="@mipmap/card_background"
                 android:id="@+id/step_layout">
 
 
@@ -164,7 +171,7 @@
                     app:layout_constraintBottom_toTopOf="@id/guideline_step_card_hor"
                     app:layout_constraintEnd_toEndOf="@id/guideline_step_ver"
                     app:layout_constraintStart_toStartOf="@id/guideline_step_ver"
-                    android:layout_marginBottom="@dimen/dp8">
+                    android:layout_marginBottom="@dimen/dp16">
                 </androidx.appcompat.widget.AppCompatTextView>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -203,7 +210,7 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:cardCornerRadius="@dimen/dp8"
             android:layout_marginStart="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp24"
             app:cardElevation="@dimen/dp0"
             android:id="@+id/card_calories">
 
@@ -211,7 +218,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/card_background"
+                android:background="@mipmap/card_background"
                 android:id="@+id/calories_layout">
 
 
@@ -242,7 +249,7 @@
                     app:layout_constraintBottom_toTopOf="@id/guideline_calories_card_hor"
                     app:layout_constraintEnd_toEndOf="@id/guideline_calories_card_ver"
                     app:layout_constraintStart_toStartOf="@id/guideline_calories_card_ver"
-                    android:layout_marginBottom="@dimen/dp8">
+                    android:layout_marginBottom="@dimen/dp16">
                 </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -287,7 +294,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/card_background_hor">
+                android:background="@mipmap/card_background_hor">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -335,6 +342,8 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 
 </FrameLayout>

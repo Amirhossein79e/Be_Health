@@ -16,15 +16,12 @@ public class DialogVm extends BaseObservable {
     public boolean maleChecked = false;
     public boolean femaleChecked = false;
     private PrefManager prefManager;
-    private Dialog dialog;
     private DialogVmCallback dialogVmCallback;
 
-    public DialogVm(Dialog dialog, DialogVmCallback dialogVmCallback)
+    public DialogVm(DialogVmCallback dialogVmCallback)
     {
-        this.dialog = dialog;
         this.dialogVmCallback = dialogVmCallback;
         prefManager = Application.dComponent.prefManager();
-
     }
 
 
@@ -52,7 +49,7 @@ public class DialogVm extends BaseObservable {
                 prefManager.setTarget(6000);
 
                 dialogVmCallback.onCorrect();
-                dialog.cancel();
+                dialogVmCallback.onCanceled();
 
             }else
             {

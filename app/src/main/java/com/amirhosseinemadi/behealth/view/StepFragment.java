@@ -9,7 +9,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 import com.amirhosseinemadi.behealth.R;
 import com.amirhosseinemadi.behealth.databinding.FragmentStepBinding;
 import com.amirhosseinemadi.behealth.model.service.StepService;
@@ -35,16 +35,9 @@ public class StepFragment extends Fragment {
         binding.setViewModel(viewModel);
 
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {}
+        return binding.getRoot();
 
-        },2000);
-
-
-            return binding.getRoot();
-        }
+    }
 
 
     @Override
@@ -54,17 +47,17 @@ public class StepFragment extends Fragment {
                 @Override
                 public void onChanged(Integer integer) {
                     if (integer != 0) {
-                        String str = String.valueOf(integer / 60 + "'");
+                        String str = integer / 60 + "'";
                         viewModel.setTime(str);
                     }
                 }
             });
 
 
-        StepService.stepLiveData.observe(getViewLifecycleOwner(), new Observer<Float>() {
+        StepService.stepLiveData.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Float aFloat) {
-                String str = String.valueOf(aFloat);
+            public void onChanged(Integer integer) {
+                String str = String.valueOf(integer);
                 viewModel.setSteps(str);
             }
         });

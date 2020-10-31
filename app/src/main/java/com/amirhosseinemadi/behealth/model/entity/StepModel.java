@@ -18,13 +18,13 @@ public class StepModel {
     int time;
 
     @ColumnInfo(name = "distance",typeAffinity = 4)
-    int distance;
+    float distance;
 
     @ColumnInfo(name = "date",typeAffinity = 3)
     long date;
 
     @ColumnInfo(name = "calorie",typeAffinity = 3)
-    float calories;
+    int calories;
 
     public int getId() {
         return id;
@@ -50,11 +50,11 @@ public class StepModel {
         this.time = time;
     }
 
-    public int getDistance() {
+    public float getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(float distance) {
         this.distance = distance;
     }
 
@@ -66,11 +66,11 @@ public class StepModel {
         this.date = date;
     }
 
-    public float getCalories() {
+    public int getCalories() {
         return calories;
     }
 
-    public void setCalories(float calories) {
+    public void setCalories(int calories) {
         this.calories = calories;
     }
 }

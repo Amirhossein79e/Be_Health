@@ -129,7 +129,7 @@ public class PrefManager {
     }
 
 
-    public float getStep()
+    public Float getStep()
     {
         return sharedPreferences.getFloat("step",0f);
     }

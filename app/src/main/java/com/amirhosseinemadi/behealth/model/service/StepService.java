@@ -13,9 +13,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.Looper;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
@@ -35,11 +33,10 @@ public class StepService extends Service {
     private SensorEventListener stepDetectorListener;
     private Sensor stepCounter;
     private Sensor stepDetector;
-    private Notification.Builder notification;
     private int step;
     private int time;
     public static MutableLiveData<Integer> timeLiveData = new MutableLiveData<>();
-    public static MutableLiveData<Float> stepLiveData = new MutableLiveData<>();
+    public static MutableLiveData<Integer> stepLiveData = new MutableLiveData<>();
     private float realStepPreferences;
     private Timer timer;
     private Timer stepChecker;
@@ -48,12 +45,12 @@ public class StepService extends Service {
     private PrefManager prefManager;
     public static Integer isRunning = null;
 
-
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
+    public void onCreate() {
+        super.onCreate();
 
         PendingIntent pendingIntent = PendingIntent.getService(this,1,new Intent(this, MainActivity.class),PendingIntent.FLAG_ONE_SHOT);
+        Notification.Builder notification;
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O)
         {
             NotificationChannel channel = new NotificationChannel("2329","Walking Channel",NotificationManager.IMPORTANCE_LOW);
@@ -68,7 +65,12 @@ public class StepService extends Service {
         notification.setContent(new RemoteViews(getPackageName(),R.layout.notification_layout));
         notification.setSmallIcon(R.drawable.ic_calories);
         notification.setContentIntent(pendingIntent);
-        startForeground(2329,notification.build());
+        startForeground(2329, notification.build());
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         isRunning = 0;
 
@@ -83,7 +85,14 @@ public class StepService extends Service {
                 stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
                 stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
+                /*if (stepCounter == null || stepDetector == null)
+                {
+                    stopForeground(true);
+                    stopSelf();
+                }*/
+
                 timeLiveData.postValue(prefManager.getTime());
+                stepLiveData.postValue(prefManager.getStep().intValue());
 
                 SensorEventListener stepCounterListener = new SensorEventListener() {
                     @Override
@@ -136,29 +145,18 @@ public class StepService extends Service {
                                     }
                                     previousStep = realStep;
 
-                                    if (isFirst)
-                                    {
-                                        if (intent.getAction()!=null)
+
+                                        if (prefManager.getReboot())
                                         {
-                                            if (intent.getAction().equals("REBOOT"))
-                                            {
-                                                Looper.prepare();
-                                                prefManager.setPreviousStep(0);
-                                                Toast.makeText(StepService.this, "Hello", Toast.LENGTH_SHORT).show();
+                                                //Looper.prepare();
+                                                //Toast.makeText(StepService.this, "Hello", Toast.LENGTH_SHORT).show();
+                                                prefManager.setBackupStep(prefManager.getStep());
                                                 prefManager.setStep(realStepPreferences + prefManager.getBackupStep());
-                                                prefManager.setBackupStep(0);
-                                            }
+                                                prefManager.setReboot(false);
                                         }else
                                         {
-                                            prefManager.setStep(realStepPreferences-prefManager.getPreviousStep());
-                                            prefManager.setBackupStep(realStepPreferences-prefManager.getPreviousStep());
+                                            prefManager.setStep(realStepPreferences-prefManager.getPreviousStep()+prefManager.getBackupStep());
                                         }
-                                        isFirst = false;
-                                    }else
-                                    {
-                                        prefManager.setStep(realStepPreferences-prefManager.getPreviousStep());
-                                        prefManager.setBackupStep(realStepPreferences-prefManager.getPreviousStep());
-                                    }
 
                                     int previousTime = prefManager.getTime();
                                     prefManager.setTime(previousTime+time);
@@ -167,7 +165,7 @@ public class StepService extends Service {
 
                                     if (StepFragment.isRunning==1)
                                     {
-                                        stepLiveData.postValue(prefManager.getStep());
+                                        stepLiveData.postValue(prefManager.getStep().intValue());
                                         timeLiveData.postValue(prefManager.getTime());
                                     }
 
