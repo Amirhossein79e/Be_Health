@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements DialogVmCallback 
                 break;
 
             case R.id.heart_menu_item :
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,new HeartFragment()).commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,new HeartFragment()).commit();
                 break;
 
             case R.id.calories_menu_item :

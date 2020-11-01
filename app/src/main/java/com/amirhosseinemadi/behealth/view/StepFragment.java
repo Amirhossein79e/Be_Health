@@ -11,14 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.amirhosseinemadi.behealth.R;
+import com.amirhosseinemadi.behealth.common.Application;
+import com.amirhosseinemadi.behealth.common.PrefManager;
 import com.amirhosseinemadi.behealth.databinding.FragmentStepBinding;
+import com.amirhosseinemadi.behealth.model.others.Calculator;
 import com.amirhosseinemadi.behealth.model.service.StepService;
 import com.amirhosseinemadi.behealth.viewModel.StepVm;
+
+import java.text.DecimalFormat;
 
 public class StepFragment extends Fragment {
 
     private StepVm viewModel;
     public static int isRunning;
+    private PrefManager prefManager;
+    private Calculator calculator;
+    private DecimalFormat decimalFormat;
 
     public StepFragment() {
         // Required empty public constructor
@@ -31,6 +39,11 @@ public class StepFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         FragmentStepBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_step, container, false);
+
+        prefManager = Application.dComponent.prefManager();
+        calculator = Application.dComponent.calculator();
+        decimalFormat = new DecimalFormat("#.#");
+
         viewModel = new StepVm(getViewLifecycleOwner());
         binding.setViewModel(viewModel);
 
@@ -59,6 +72,9 @@ public class StepFragment extends Fragment {
             public void onChanged(Integer integer) {
                 String str = String.valueOf(integer);
                 viewModel.setSteps(str);
+                viewModel.setProgress(integer);
+                viewModel.setDistance(decimalFormat.format((calculator.calculateDistance(prefManager.getStep(),prefManager.getStride()))/1000));
+                viewModel.setCalories(String.valueOf(calculator.calculateCalories(prefManager.getBmr(),calculator.calculateMet(calculator.calculateDistance(prefManager.getStep(),prefManager.getStride()),prefManager.getTime()),prefManager.getTime())));
             }
         });
         }

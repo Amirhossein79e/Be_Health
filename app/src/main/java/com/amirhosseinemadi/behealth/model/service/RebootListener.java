@@ -20,16 +20,19 @@ public class RebootListener extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+
+        Application.dComponent.prefManager().setTest(true);
+
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         Sensor stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
-        if ((StepService.isRunning == null) /*&& (stepCounter != null && stepDetector != null)*/ && Application.dComponent.prefManager().getHeight() != 0)
+        if ((StepService.isRunning == null) && (stepCounter != null && stepDetector != null) && Application.dComponent.prefManager().getHeight() != 0)
         {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             {
-                if (intent.getAction().equals("android.intent.action.LOCKED_BOOT_COMPLETED"))
+                if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED"))
                 {
                     Application.dComponent.prefManager()
                             .setPreviousStep(0)

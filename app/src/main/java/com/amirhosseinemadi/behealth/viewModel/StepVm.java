@@ -30,6 +30,12 @@ public class StepVm extends BaseObservable {
     @Bindable
     public String time = "0";
 
+    @Bindable
+    public Integer progress = 0;
+
+    @Bindable
+    public Integer maxProgress = 0;
+
 
     public StepVm(LifecycleOwner lifecycleOwner)
     {
@@ -37,8 +43,10 @@ public class StepVm extends BaseObservable {
         calculator = Application.dComponent.calculator();
 
         target = String.valueOf("/"+prefManager.getTarget());
+        maxProgress = prefManager.getTarget();
         time = String.valueOf(prefManager.getTime()/60);
         steps = String.valueOf(prefManager.getStep());
+        progress = prefManager.getStep().intValue();
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         distance = String.valueOf(decimalFormat.format((calculator.calculateDistance(prefManager.getStep(),prefManager.getStride()))/1000));
         int calorie = calculator.calculateCalories(prefManager.getBmr(),calculator.calculateMet(calculator.calculateDistance(prefManager.getStep(),prefManager.getStride()),prefManager.getTime()),prefManager.getTime());
@@ -89,5 +97,23 @@ public class StepVm extends BaseObservable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public Integer getProgress() {
+        notifyPropertyChanged(BR.progress);
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
+
+    public Integer getMaxProgress() {
+        notifyPropertyChanged(BR.maxProgress);
+        return maxProgress;
+    }
+
+    public void setMaxProgress(Integer maxProgress) {
+        this.maxProgress = maxProgress;
     }
 }

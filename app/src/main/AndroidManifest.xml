@@ -29,13 +29,9 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".model.service.RebootListener"
-            android:directBootAware="true"
-            tools:targetApi="n">
+        <receiver android:name=".model.service.RebootListener">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"> </action>
-                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED"> </action>
             </intent-filter>
         </receiver>
 

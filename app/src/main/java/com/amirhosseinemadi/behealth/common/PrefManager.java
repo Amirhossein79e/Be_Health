@@ -187,5 +187,17 @@ public class PrefManager {
     }
 
 
+    public void setTest(boolean b)
+    {
+        editor.putBoolean("test",b).commit();
+    }
+
+
+    public boolean getTest()
+    {
+        return sharedPreferences.getBoolean("test",false);
+    }
+
+
 
 }
